@@ -1,0 +1,301 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'Application/homepage.css' %}">
+    <script src="{% static 'Application/homepage.js' %}"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deeptron - Enterprise-Grade Deepfake Detection</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .banner .content .model {
+            background-image: url("{% static 'images/main.png' %}");
+            width: 100%;
+            height: 75vh;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background-size: 50% auto;  /* Reduce width to 50% */
+            background-repeat: no-repeat;
+            background-position: top center;
+            z-index: 1;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    <div id="gradient-background"></div>
+    <div class="loading-bar"></div>
+    <div class="particles"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">DEEPTRON</div>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Solutions</a></li>
+                    <li><a href="#">Technology</a></li>
+                </ul>
+            </nav>
+            <button class="cta-button">Get Started</button>
+        </header>
+
+        <section class="hero">
+            <h1 class="brand-name">Deeptron</h1>
+
+            <div class="banner">
+                <div class="slider" style="--quantity: 10">
+                    <div class="item" style="--position: 1"><img src="{% static 'images/img1.png' %}" alt=""></div>
+                    <div class="item" style="--position: 2"><img src="{% static 'images/img2.png' %}" alt=""></div>
+                    <div class="item" style="--position: 3"><img src="{% static 'images/img3.png' %}" alt=""></div>
+                    <div class="item" style="--position: 4"><img src="{% static 'images/img4.png' %}"alt=""></div>
+                    <div class="item" style="--position: 5"><img src="{% static 'images/img5.png' %}" alt=""></div>
+                    <div class="item" style="--position: 6"><img src="{% static 'images/img6.png' %}" alt=""></div>
+                    <div class="item" style="--position: 7"><img src="{% static 'images/img7.png' %}" alt=""></div>
+                    <div class="item" style="--position: 8"><img src="{% static 'images/img8.png' %}" alt=""></div>
+                    <div class="item" style="--position: 9"><img src="{% static 'images/img9.png' %}" alt=""></div>
+                    <div class="item" style="--position: 10"><img src="{% static 'images/img10.png' %}" alt=""></div>
+                </div>
+
+                <div class="content">
+                    <div class="model"></div>
+                </div>
+            </div>
+
+            <p class="tagline">AI-powered deepfake detection with unparalleled accuracy. Protect your digital assets and maintain information integrity in an increasingly synthetic world.</p>
+
+            
+            <div id="link-section" class="link-section">
+                <h2 class="link-title">Verify Media URL Authenticity</h2>
+                <div class="link-box" id="link-area" style="position: relative;">
+                    <div class="link-icon">
+                        <svg width="50" height="50" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13.8284 10.1716C12.2663 8.60948 9.73367 8.60948 8.17157 10.1716L4.17157 14.1716C2.60948 15.7337 2.60948 18.2663 4.17157 19.8284C5.73367 21.3905 8.26633 21.3905 9.82843 19.8284L10.93 18.7269" stroke="#FF3333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M10.1716 13.8284C11.7337 15.3905 14.2663 15.3905 15.8284 13.8284L19.8284 9.82843C21.3905 8.26633 21.3905 5.73367 19.8284 4.17157C18.2663 2.60948 15.7337 2.60948 14.1716 4.17157L13.072 5.27118" stroke="#FF3333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <p class="link-text">Enter the URL you want to verify</p>
+                    <p class="link-subtext">Paste a direct link to an image, video, or article</p>
+            
+                    <!-- ✅ Fixed Input Field -->
+                    <input type="text" id="url-input" class="link-input" placeholder="Enter video URL" onfocus="this.select()" required
+                        style="position: relative; z-index: 10; pointer-events: auto; background: white;">
+                </div>
+            
+                <!-- CSRF Token for Secure Requests -->
+                <input type="hidden" id="csrf-token" value="{{ csrf_token }}">
+            
+                <button class="btn" id="analyze-btn-2" disabled>Analyze Now</button>
+            </div>
+
+            <div class="loading-container" id="loading" style="display: none;"> 
+                <div class="glassmorphic-loader">
+                  <div class="glow-pulse"></div>
+                  <div class="holographic-effect"></div>
+                  <div class="status-text">Sending media to server</div>
+                  <div class="progress-track">
+                    <div class="progress-bar">
+                      <div class="liquid-effect"></div>
+                    </div>
+                  </div>
+                  <div class="percentage">0%</div>
+                  <div class="icon-container">
+                    <div class="completion-ring"></div>
+                    <div class="checkmark">✓</div>
+                  </div>
+                  <div class="particle-container"></div>
+                </div>
+              </div>
+
+            <div id="analysis-result" class="result-container" style="display: none;">
+                <p class="result-text">🔍 Analysis Result: <span id="result-output"></span></p>
+            </div>  
+
+            <div id="upload-section" class="upload-section">
+                <h2 class="upload-title">Verify Media Authenticity</h2>
+                <div class="upload-box" id="drop-area">
+                    <input type="file" id="file-upload" name="file" accept="image/jpeg, image/png, video/mp4, video/quicktime, video/webm" hidden>
+                    <div class="upload-icon">
+                        <!-- SVG icon here -->
+                    </div>
+                    <p class="upload-text">Drag and drop your media file here</p>
+                    <p class="upload-subtext">or click to browse your files</p>
+                    <p class="upload-subtext">Supports JPG, PNG, MP4, MOV, WEBM up to 25MB</p>
+                </div>
+                
+                <!-- CSRF Token for Secure Requests -->
+                <input type="hidden" id="csrf-token" value="{{ csrf_token }}">
+                
+                <button class="btn" id="analyze-btn-1">Analyze Now</button>
+            </div>
+
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">
+                        <svg width="50" height="50" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15.5 14H14.71L14.43 13.73C15.63 12.33 16.25 10.42 15.91 8.39C15.44 5.61 13.12 3.39 10.32 3.05C6.09 2.53 2.53 6.09 3.05 10.32C3.39 13.12 5.61 15.44 8.39 15.91C10.42 16.25 12.33 15.63 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5C5 7.01 7.01 5 9.5 5C11.99 5 14 7.01 14 9.5C14 11.99 11.99 14 9.5 14Z" fill="#FF3333"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">99.8% Accuracy</h3>
+                    <p class="feature-desc">Our state-of-the-art algorithm outperforms industry standards, capable of detecting even the most sophisticated deepfakes with near-perfect precision.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">
+                        <svg width="50" height="50" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" fill="#FF3333"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Real-time Analysis</h3>
+                    <p class="feature-desc">Get results in seconds, not minutes. Our proprietary neural network leverages GPU acceleration for time-sensitive verification at scale.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">
+                        <svg width="50" height="50" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 1L3 5V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V5L12 1ZM12 11.99H19C18.47 16.11 15.72 19.78 12 20.93V12H5V6.3L12 3.19V11.99Z" fill="#FF3333"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Enterprise Security</h3>
+                    <p class="feature-desc">Your uploads are processed with military-grade encryption and never stored on our servers. SOC 2 Type II certified for maximum data protection.</p>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number">7K+</div>
+                    <div class="stat-label">Files Analyzed</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">89.8%</div>
+                    <div class="stat-label">Accuracy</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">30s</div>
+                    <div class="stat-label">Average Processing Time</div>
+                </div>
+            </div>
+
+            <div class="testimonials">
+                <h2 class="testimonial-title">Trusted By Industry Leaders</h2>
+                <div class="testimonial-container">
+                    <div class="testimonial">
+                        <p class="testimonial-text">"Deeptron has revolutionized our content verification process. What used to take hours now happens in seconds with even better accuracy."</p>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar"></div>
+                            <div>
+                                <div class="testimonial-name">Sarah Johnson</div>
+                                <div class="testimonial-position">Chief Security Officer, Global News Corp</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial">
+                        <p class="testimonial-text">"The API integration was seamless, and the accuracy is unmatched. Deeptron is now a critical component of our digital asset verification pipeline."</p>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar"></div>
+                            <div>
+                                <div class="testimonial-name">David Chen</div>
+                                <div class="testimonial-position">VP of Engineering, TechSecure Solutions</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial">
+                        <p class="testimonial-text">"Our legal team relies on Deeptron daily to verify evidence authenticity. The detailed forensic reports have been invaluable in court proceedings."</p>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar"></div>
+                            <div>
+                                <div class="testimonial-name">Michael Reynolds</div>
+                                <div class="testimonial-position">Senior Partner, Reynolds & Associates</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-section">
+                <h2 class="cta-title">Ready to protect your digital integrity?</h2>
+                <p class="cta-desc">Join thousands of organizations worldwide that trust Deeptron to verify media authenticity and combat misinformation.</p>
+                <button class="btn">Start Free Trial</button>
+            </div>
+        </section>
+
+        <section class="features" id="features">
+            <h2 class="section-title">Advanced Detection Features</h2>
+            <div class="features-container">
+                <div class="feature-card">
+                    <i class="fas fa-video feature-icon"></i>
+                    <h3>Video Analysis</h3>
+                    <p>Our AI detects inconsistencies in facial movements, blinking patterns, and other subtle cues that reveal deepfake videos.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-image feature-icon"></i>
+                    <h3>Image Verification</h3>
+                    <p>Identify manipulated images through analysis of lighting, shadows, reflections, and pixel-level inconsistencies.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-microphone feature-icon"></i>
+                    <h3>Audio Authentication</h3>
+                    <p>Detect synthetic voices and audio deepfakes by analyzing speech patterns, background noise, and acoustic signatures.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-chart-line feature-icon"></i>
+                    <h3>Confidence Rating</h3>
+                    <p>Receive a detailed confidence score and analysis report explaining why content is classified as authentic or fake.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-bolt feature-icon"></i>
+                    <h3>Real-Time Processing</h3>
+                    <p>Get results in seconds with our high-performance cloud infrastructure optimized for rapid analysis.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-lock feature-icon"></i>
+                    <h3>Privacy Protected</h3>
+                    <p>Your uploaded content is analyzed securely and deleted after processing, ensuring complete privacy.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">DeepFake Guardian</div>
+            <p>Protecting digital truth in an era of synthetic media</p>
+            
+            <div class="footer-links">
+                <a href="#">Home</a>
+                <a href="#">Services</a>
+                <a href="#">About Us</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact</a>
+            </div>
+            
+            <p class="copyright">© 2025 DeepFake Guardian. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>    
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const urlInput = document.getElementById("url-input");
+        const analyzeBtn = document.getElementById("analyze-btn-2");
+
+        // ✅ Enable button only when a valid URL is entered
+        urlInput.addEventListener("input", function() {
+            analyzeBtn.disabled = !urlInput.value.trim();
+        });
+    });
+</script>
