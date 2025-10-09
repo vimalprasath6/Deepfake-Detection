@@ -16,7 +16,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # 🔹 Load Pre-trained Model
-MODEL_PATH = r"C:\Users\Anand Jyothis G\Deepfake\xception-43020ad28.pth"
+MODEL_PATH = r"C:\Users\vimal\Git_Projects\Deepfake\xception-43020ad28.pth"
 
 try:
     # Load Xception model without classifier
@@ -53,7 +53,7 @@ transform = transforms.Compose([
 face_detector = MTCNN(keep_all=True, device=device)
 
 # 🔹 Define Media Paths
-MEDIA_PATH = r"C:\Users\Anand Jyothis G\Deepfake\media\uploads"
+MEDIA_PATH = r"C:\Users\vimal\Git_Projects\Deepfake\media\uploads"
 FACE_PATH = os.path.join(MEDIA_PATH, "faces")  # Directory for saving extracted faces
 os.makedirs(FACE_PATH, exist_ok=True)
 
