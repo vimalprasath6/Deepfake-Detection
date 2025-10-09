@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+env/
+venv/
+.DS_Store
+*.h5   # If you have other model types you don't want to push
